@@ -1,5 +1,6 @@
 package com.jenac.hellokafka.service
 
+import com.jenac.hellokafka.config.KafkaConfig
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.kafka.core.KafkaTemplate
@@ -10,16 +11,15 @@ import org.springframework.stereotype.Service
 
 
 @Service
-class Producer {
+class Producer(val config: KafkaConfig) {
     @Autowired
     private val kafkaTemplate: KafkaTemplate<String, String?>? = null
     fun sendMessage(message: String?) {
         Producer.Companion.logger.info(String.format("#### -> Producing message -> %s", message))
-        kafkaTemplate!!.send(Producer.Companion.TOPIC, message)
+        kafkaTemplate!!.send(config.topicNameUsers, message)
     }
 
     companion object {
         private val logger: Logger = LoggerFactory.getLogger(Producer::class.java)
-        private const val TOPIC = "users"
     }
 }
